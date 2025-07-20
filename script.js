@@ -24,15 +24,6 @@ let engagementData = {
  */
 let notificationCount = 3; // Current notification count
 
-/**
- * Real-time update intervals (in milliseconds)
- */
-const UPDATE_INTERVALS = {
-    notifications: 45000,    // 45 seconds
-    roomStatus: 120000,      // 2 minutes
-    engagement: 30000        // 30 seconds
-};
-
 // ========================================
 // APPLICATION INITIALIZATION
 // ========================================
@@ -46,14 +37,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     try {
         // Initialize all core systems
+        initializeNotifications();
         initializeWidgets();
         initializeInteractions();
         updateDateTime();
-        initializeNotifications();
         setupKeyboardShortcuts();
-        initializeLazyLoading();
         
-        // Start real-time update systems
+        // Start real-time update systems after delay
         setTimeout(simulateRealTimeUpdates, 5000);
         
         console.log('✅ Office Space Intranet Portal loaded successfully!');
@@ -62,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Show welcome notification after brief delay
         setTimeout(() => {
             showNotification('Welcome to Office Space Intranet! 🏢', 'success');
-        }, 1000);
+        }, 1500);
         
     } catch (error) {
         console.error('❌ Initialization error:', error);
@@ -97,9 +87,6 @@ function initializeWidgets() {
     initializeHolidayRequests();
     initializeSupportSystem();
     initializeSocialSharing();
-    initializeMeetingRooms();
-    initializeInterviewSystem();
-    initializeReferralSystem();
     initializeResourceLinks();
     
     console.log('✅ All widgets initialized');
@@ -210,11 +197,11 @@ function initializeSupportSystem() {
 function getSupportType(button) {
     const icon = button.querySelector('i');
     
-    if (icon.classList.contains('fa-bug')) {
+    if (icon && icon.classList.contains('fa-bug')) {
         return 'Bug Report';
-    } else if (icon.classList.contains('fa-question-circle')) {
+    } else if (icon && icon.classList.contains('fa-question-circle')) {
         return 'Help Request';
-    } else if (icon.classList.contains('fa-laptop')) {
+    } else if (icon && icon.classList.contains('fa-laptop')) {
         return 'Hardware Request';
     }
     
@@ -244,36 +231,6 @@ function initializeSocialSharing() {
             }, 300);
         });
     });
-}
-
-/**
- * Initialize meeting room management
- * Sets up room booking and status management
- */
-function initializeMeetingRooms() {
-    console.log('🏢 Meeting room booking system initialized');
-    // Room booking handled by individual onClick functions
-    // This can be extended for more complex room management features
-}
-
-/**
- * Initialize interview management system
- * Handles interview scheduling and candidate management
- */
-function initializeInterviewSystem() {
-    console.log('👔 Interview management system initialized');
-    // Interview system handled by individual onClick functions
-    // This can be extended for calendar integration and notifications
-}
-
-/**
- * Initialize employee referral system
- * Manages referral tracking and bonus calculations
- */
-function initializeReferralSystem() {
-    console.log('👥 Employee referral system initialized');
-    // Referral system handled by individual onClick functions
-    // This can be extended for referral progress tracking
 }
 
 /**
@@ -311,7 +268,6 @@ function initializeResourceLinks() {
 function initializeInteractions() {
     setupWidgetHoverEffects();
     setupViewAllButtons();
-    setupHeaderInteractions();
 }
 
 /**
@@ -343,22 +299,13 @@ function setupViewAllButtons() {
     
     viewAllButtons.forEach(button => {
         button.addEventListener('click', function() {
-            const widgetTitle = this.closest('.widget-header')
-                                   .querySelector('h3')
-                                   .textContent
-                                   .trim();
+            const widgetHeader = this.closest('.widget-header');
+            const titleElement = widgetHeader ? widgetHeader.querySelector('h3') : null;
+            const widgetTitle = titleElement ? titleElement.textContent.trim() : 'Unknown Widget';
             
             showNotification(`📋 Opening full ${widgetTitle} view...`, 'info');
         });
     });
-}
-
-/**
- * Setup header interaction features
- */
-function setupHeaderInteractions() {
-    // Header interactions are handled by individual onClick functions
-    console.log('🔧 Header interactions configured');
 }
 
 /**
@@ -394,6 +341,13 @@ function initializeNotifications() {
     if (!document.querySelector('.notification-container')) {
         const container = document.createElement('div');
         container.className = 'notification-container';
+        container.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            pointer-events: none;
+        `;
         document.body.appendChild(container);
         
         console.log('📢 Notification system initialized');
@@ -415,16 +369,42 @@ function showNotification(message, type = 'info') {
     
     // Create notification element
     const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
+    notification.className = 'notification';
     notification.textContent = message;
+    
+    // Set type-specific styling
+    const colors = {
+        success: '#059669',
+        error: '#dc2626',
+        warning: '#d97706',
+        info: '#2563eb'
+    };
+    
+    notification.style.cssText = `
+        background: white;
+        color: #1e293b;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        transform: translateX(400px);
+        transition: all 0.3s ease;
+        pointer-events: auto;
+        cursor: pointer;
+        font-weight: 500;
+        max-width: 350px;
+        word-wrap: break-word;
+        border-left: 4px solid ${colors[type] || colors.info};
+        border: 1px solid #e2e8f0;
+    `;
     
     // Add notification to container
     container.appendChild(notification);
     
     // Trigger slide-in animation
-    requestAnimationFrame(() => {
+    setTimeout(() => {
         notification.style.transform = 'translateX(0)';
-    });
+    }, 100);
     
     // Auto-remove after 4 seconds
     const autoRemoveTimer = setTimeout(() => {
@@ -511,13 +491,13 @@ function animateStatUpdate(element) {
     
     // Scale up and change color
     element.style.transform = 'scale(1.2)';
-    element.style.color = 'var(--success-color)';
+    element.style.color = '#059669';
     element.style.transition = 'all 0.3s ease';
     
     // Reset to original state
     setTimeout(() => {
         element.style.transform = 'scale(1)';
-        element.style.color = 'var(--primary-color)';
+        element.style.color = '#2563eb';
     }, 500);
 }
 
@@ -531,21 +511,21 @@ function animateStatUpdate(element) {
 function simulateRealTimeUpdates() {
     console.log('🔄 Starting real-time update simulation');
     
-    // Simulate notification updates
+    // Simulate notification updates every 45 seconds
     setInterval(() => {
-        if (Math.random() < 0.4) { // 40% chance every interval
+        if (Math.random() < 0.4) { // 40% chance
             notificationCount++;
             updateNotificationBadge();
             animateNotificationBell();
         }
-    }, UPDATE_INTERVALS.notifications);
+    }, 45000);
 
-    // Simulate meeting room status changes
+    // Simulate meeting room status changes every 2 minutes
     setInterval(() => {
-        if (Math.random() < 0.3) { // 30% chance every interval
+        if (Math.random() < 0.3) { // 30% chance
             simulateRoomStatusChange();
         }
-    }, UPDATE_INTERVALS.roomStatus);
+    }, 120000);
 }
 
 /**
@@ -591,4 +571,303 @@ function simulateRoomStatusChange() {
     if (roomItems.length === 0) return;
     
     // Select random room to update
-    const randomRoom = roomItems[Math.floor(Math.random() * roomItems
+    const randomRoom = roomItems[Math.floor(Math.random() * roomItems.length)];
+    const statusBadge = randomRoom.querySelector('.status-badge');
+    const bookBtn = randomRoom.querySelector('.book-room-btn');
+    
+    if (!statusBadge || !bookBtn) return;
+    
+    if (randomRoom.classList.contains('available')) {
+        // Change to busy
+        randomRoom.classList.remove('available');
+        randomRoom.classList.add('busy');
+        statusBadge.textContent = 'Busy until 4:00 PM';
+        statusBadge.classList.remove('available');
+        statusBadge.classList.add('busy');
+        bookBtn.innerHTML = '<i class="fas fa-clock"></i> Wait';
+        bookBtn.disabled = true;
+        bookBtn.classList.add('disabled');
+    } else {
+        // Change to available
+        randomRoom.classList.remove('busy');
+        randomRoom.classList.add('available');
+        statusBadge.textContent = 'Available Now';
+        statusBadge.classList.remove('busy');
+        statusBadge.classList.add('available');
+        bookBtn.innerHTML = '<i class="fas fa-calendar-plus"></i> Book';
+        bookBtn.disabled = false;
+        bookBtn.classList.remove('disabled');
+    }
+    
+    showNotification('Meeting room availability updated! 🏢', 'info');
+}
+
+// ========================================
+// KEYBOARD SHORTCUTS
+// ========================================
+
+/**
+ * Setup keyboard shortcuts for power users
+ */
+function setupKeyboardShortcuts() {
+    document.addEventListener('keydown', function(e) {
+        // Alt + H for Holiday Request
+        if (e.altKey && e.key === 'h') {
+            e.preventDefault();
+            const holidayBtn = document.querySelector('.request-holiday-btn');
+            if (holidayBtn && !holidayBtn.disabled) {
+                holidayBtn.click();
+                showNotification('Keyboard shortcut: Holiday Request! ⌨️', 'info');
+            }
+        }
+        
+        // Alt + S for IT Support
+        if (e.altKey && e.key === 's') {
+            e.preventDefault();
+            const supportBtn = document.querySelector('.support-btn');
+            if (supportBtn) {
+                supportBtn.click();
+                showNotification('Keyboard shortcut: IT Support! ⌨️', 'info');
+            }
+        }
+        
+        // Alt + N for Notifications
+        if (e.altKey && e.key === 'n') {
+            e.preventDefault();
+            toggleNotifications();
+            showNotification('Keyboard shortcut: Notifications! ⌨️', 'info');
+        }
+        
+        // Alt + M for Meeting Rooms
+        if (e.altKey && e.key === 'm') {
+            e.preventDefault();
+            refreshRoomStatus();
+            showNotification('Keyboard shortcut: Meeting Rooms! ⌨️', 'info');
+        }
+    });
+}
+
+// ========================================
+// CLICK HANDLER FUNCTIONS (Global Functions)
+// ========================================
+
+/**
+ * Handle notification bell click
+ */
+function toggleNotifications() {
+    const bell = document.querySelector('.notification-bell');
+    
+    if (bell) {
+        // Reset notification count
+        notificationCount = 0;
+        updateNotificationBadge();
+        
+        // Animate bell
+        bell.style.transform = 'scale(1.1)';
+        setTimeout(() => {
+            bell.style.transform = 'scale(1)';
+        }, 200);
+    }
+    
+    showNotification('Notifications panel opened! 🔔', 'info');
+}
+
+/**
+ * Handle user avatar click
+ */
+function toggleUserMenu() {
+    showNotification('User profile menu opened! 👤', 'info');
+}
+
+/**
+ * Handle schedule new meeting
+ */
+function scheduleNewMeeting() {
+    showNotification('Meeting scheduler opened! 📅', 'info');
+}
+
+/**
+ * Handle view all tasks
+ */
+function viewAllTasks() {
+    showNotification('Task management system opened! ✅', 'info');
+}
+
+/**
+ * Handle view all events
+ */
+function viewAllEvents() {
+    showNotification('Full events calendar opened! 📅', 'info');
+}
+
+/**
+ * Handle birthday wish sending
+ * @param {string} name - Name of the birthday person
+ */
+function sendBirthdayWish(name) {
+    showNotification(`🎉 Birthday wish sent to ${name}! 🎂`, 'success');
+}
+
+/**
+ * Handle holiday time off request
+ */
+function requestTimeOff() {
+    // This is handled by the initialized event listener
+    const holidayBtn = document.querySelector('.request-holiday-btn');
+    if (holidayBtn && !holidayBtn.disabled) {
+        holidayBtn.click();
+    }
+}
+
+/**
+ * Handle IT issue reporting
+ */
+function reportIssue() {
+    showNotification('Bug report form opened! 🐛', 'warning');
+}
+
+/**
+ * Handle help request
+ */
+function getHelp() {
+    showNotification('Help desk contacted! 🆘', 'info');
+}
+
+/**
+ * Handle hardware request
+ */
+function requestHardware() {
+    showNotification('Hardware request form opened! 💻', 'info');
+}
+
+/**
+ * Handle view all news
+ */
+function viewAllNews() {
+    showNotification('Company news center opened! 📰', 'info');
+}
+
+/**
+ * Handle social media platform sharing
+ * @param {string} platform - Social media platform name
+ */
+function shareOnPlatform(platform) {
+    showNotification(`🚀 Shared on ${platform}! Thanks for spreading the word! 📱`, 'success');
+    updateEngagementStats();
+}
+
+/**
+ * Handle resource link opening
+ * @param {string} resourceName - Name of the resource
+ */
+function openResource(resourceName) {
+    showNotification(`📖 Opening ${resourceName}...`, 'info');
+}
+
+/**
+ * Handle meeting room booking
+ * @param {string} roomName - Name of the room to book
+ */
+function bookRoom(roomName) {
+    showNotification(`🏢 Booking ${roomName}...`, 'success');
+    
+    // Simulate booking process
+    setTimeout(() => {
+        showNotification(`✅ ${roomName} booked successfully!`, 'success');
+    }, 1500);
+}
+
+/**
+ * Handle quick time slot booking
+ * @param {string} timeSlot - Time slot to book
+ */
+function quickBook(timeSlot) {
+    showNotification(`⏰ Booking room for ${timeSlot}...`, 'info');
+}
+
+/**
+ * Handle room status refresh
+ */
+function refreshRoomStatus() {
+    const refreshBtn = document.querySelector('.refresh-btn');
+    
+    if (refreshBtn) {
+        // Animate refresh button
+        refreshBtn.style.transform = 'rotate(360deg)';
+        refreshBtn.style.transition = 'transform 0.5s ease';
+        
+        setTimeout(() => {
+            refreshBtn.style.transform = 'rotate(0deg)';
+        }, 500);
+    }
+    
+    setTimeout(() => {
+        showNotification('Room availability refreshed! 🔄', 'success');
+    }, 500);
+}
+
+/**
+ * Handle interview schedule viewing
+ */
+function viewInterviewSchedule() {
+    showNotification('Full interview schedule opened! 👔', 'info');
+}
+
+/**
+ * Handle resume viewing
+ * @param {string} candidateName - Name of the candidate
+ */
+function viewResume(candidateName) {
+    showNotification(`📄 Opening ${candidateName}'s resume...`, 'info');
+}
+
+/**
+ * Handle joining interview
+ * @param {string} candidateName - Name of the candidate
+ */
+function joinInterview(candidateName) {
+    showNotification(`🎥 Joining interview with ${candidateName}...`, 'success');
+}
+
+/**
+ * Handle adding new referral
+ */
+function addNewReferral() {
+    showNotification('Employee referral form opened! 👥', 'info');
+}
+
+// ========================================
+// ERROR HANDLING AND DEBUGGING
+// ========================================
+
+/**
+ * Global error handler for debugging
+ */
+window.addEventListener('error', function(e) {
+    console.error('Office Space Intranet Error:', e.error);
+    showNotification('An error occurred. Please refresh the page. ⚠️', 'error');
+});
+
+/**
+ * Handle unhandled promise rejections
+ */
+window.addEventListener('unhandledrejection', function(e) {
+    console.error('Unhandled Promise Rejection:', e.reason);
+    showNotification('A system error occurred. Please try again. ⚠️', 'error');
+});
+
+// ========================================
+// PERFORMANCE MONITORING
+// ========================================
+
+/**
+ * Log performance metrics
+ */
+window.addEventListener('load', function() {
+    if ('performance' in window) {
+        const perfData = performance.getEntriesByType('navigation')[0];
+        console.log(`📊 Page load time: ${Math.round(perfData.loadEventEnd - perfData.fetchStart)}ms`);
+    }
+});
+
+console.log('🚀 Office Space Intranet JavaScript loaded and ready!');
