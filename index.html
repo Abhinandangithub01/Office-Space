@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Office Space - Employee Intranet Portal</title>
+    
+    <!-- External CSS file for all styling -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Font Awesome CDN for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- ========================================
+         HEADER NAVIGATION SECTION
+         Contains logo, navigation menu, and user profile
+         ======================================== -->
+    <header class="main-header">
+        <div class="header-content">
+            <!-- Company logo and branding -->
+            <div class="logo">
+                <i class="fas fa-building"></i>
+                <h1>Office Space</h1>
+            </div>
+            
+            <!-- Main navigation menu for different sections -->
+            <nav class="main-nav">
+                <a href="#dashboard">Dashboard</a>
+                <a href="#team">Team</a>
+                <a href="#resources">Resources</a>
+                <a href="#support">Support</a>
+            </nav>
+            
+            <!-- User profile section with notifications -->
+            <div class="user-profile">
+                <!-- Notification bell with badge -->
+                <div class="notification-bell" onclick="toggleNotifications()">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-count">3</span>
+                </div>
+                
+                <!-- User avatar and profile info -->
+                <div class="user-avatar" onclick="toggleUserMenu()">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="User Avatar">
+                    <span>John Doe</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ========================================
+         MAIN DASHBOARD CONTENT AREA
+         Contains all widget sections in a responsive grid
+         ======================================== -->
+    <main class="dashboard-container">
+        
+        <!-- ========================================
+             WELCOME HERO WIDGET - FULL WIDTH
+             Main welcome section with quick actions
+             ======================================== -->
+        <section class="welcome-widget">
+            <div class="widget-content">
+                <h2>Welcome back, John! 👋</h2>
+                <p id="welcome-message">Today is Sunday, July 20, 2025. You have 3 pending tasks and 2 upcoming meetings.</p>
+                
+                <!-- Quick action buttons for common tasks -->
+                <div class="quick-actions">
+                    <button class="action-btn primary" onclick="scheduleNewMeeting()">
+                        <i class="fas fa-calendar-plus"></i>
+                        Schedule Meeting
+                    </button>
+                    <button class="action-btn secondary" onclick="viewAllTasks()">
+                        <i class="fas fa-tasks"></i>
+                        View Tasks
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             UPCOMING EVENTS WIDGET
+             Display company events and meetings
+             ======================================== -->
+        <section class="widget events-widget">
+            <div class="widget-header">
+                <h3><i class="fas fa-calendar-alt"></i> Upcoming Events</h3>
+                <button class="view-all-btn" onclick="viewAllEvents()">View All</button>
+            </div>
+            <div class="widget-content">
+                
+                <!-- Team building event item -->
+                <div class="event-item">
+                    <div class="event-date">
+                        <span class="day">22</span>
+                        <span class="month">Jul</span>
+                    </div>
+                    <div class="event-details">
+                        <h4>Team Building Workshop</h4>
+                        <p><i class="fas fa-clock"></i> 2:00 PM - 4:00 PM</p>
+                        <p><i class="fas fa-map-marker-alt"></i> Conference Room A</p>
+                    </div>
+                </div>
+                
+                <!-- All-hands meeting event item -->
+                <div class="event-item">
+                    <div class="event-date">
+                        <span class="day">25</span>
+                        <span class="month">Jul</span>
+                    </div>
+                    <div class="event-details">
+                        <h4>Monthly All-Hands Meeting</h4>
+                        <p><i class="fas fa-clock"></i> 10:00 AM - 11:00 AM</p>
+                        <p><i class="fas fa-video"></i> Virtual Meeting</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             UPCOMING BIRTHDAYS WIDGET
+             Show employee birthdays with wish functionality
+             ======================================== -->
+        <section class="widget birthday-widget">
+            <div class="widget-header">
+                <h3><i class="fas fa-birthday-cake"></i> Upcoming Birthdays</h3>
+            </div>
+            <div class="widget-content">
+                
+                <!-- Sarah's birthday item -->
+                <div class="birthday-item">
+                    <img src="https://images.unsplash.com/photo-1494790108755-2616b612b9c5?w=50&h=50&fit=crop&crop=face" alt="Sarah">
+                    <div class="birthday-info">
+                        <h4>Sarah Johnson</h4>
+                        <p>Marketing Team • July 22</p>
+                    </div>
+                    <button class="wish-btn" onclick="sendBirthdayWish('Sarah Johnson')">
+                        <i class="fas fa-gift"></i>
+                    </button>
+                </div>
+                
+                <!-- Mike's birthday item -->
+                <div class="birthday-item">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=face" alt="Mike">
+                    <div class="birthday-info">
+                        <h4>Mike Chen</h4>
+                        <p>Engineering Team • July 24</p>
+                    </div>
+                    <button class="wish-btn" onclick="sendBirthdayWish('Mike Chen')">
+                        <i class="fas fa-gift"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             NEW TEAM MEMBERS WIDGET
+             Welcome new joiners to the company
+             ======================================== -->
+        <section class="widget new-joiners-widget">
+            <div class="widget-header">
+                <h3><i class="fas fa-user-plus"></i> Welcome New Team Members</h3>
+            </div>
+            <div class="widget-content">
+                <div class="new-joiner-item">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=60&h=60&fit=crop&crop=face" alt="Emily">
+                    <div class="joiner-info">
+                        <h4>Emily Rodriguez</h4>
+                        <p>UX Designer</p>
+                        <span class="join-date">Started July 15, 2025</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             HOLIDAY REQUEST WIDGET
+             Manage time off requests and balances
+             ======================================== -->
+        <section class="widget holiday-widget">
+            <div class="widget-header">
+                <h3><i class="fas fa-umbrella-beach"></i> Request Holiday</h3>
+            </div>
+            <div class="widget-content">
+                
+                <!-- Holiday statistics display -->
+                <div class="holiday-stats">
+                    <div class="stat">
+                        <span class="stat-number" id="remaining-days">12</span>
+                        <span class="stat-label">Days Remaining</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="pending-requests">3</span>
+                        <span class="stat-label">Pending Requests</span>
+                    </div>
+                </div>
+                
+                <!-- Holiday request button -->
+                <button class="request-holiday-btn" onclick="requestTimeOff()">
+                    <i class="fas fa-plus"></i>
+                    Request Time Off
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================
+             IT SUPPORT WIDGET
+             Access to IT help desk and support options
+             ======================================== -->
+        <section class="widget support-widget">
+            <div class="widget-header">
+                <h3><i class="fas fa-headset"></i> IT Support</h3>
+            </div>
+            <div class="widget-content">
+                
+                <!-- Support request options -->
+                <div class="support-options">
+                    <button class="support-btn" onclick="reportIssue()">
+                        <i class="fas fa-bug"></i>
+                        Report Issue
+                    </button>
+                    <button class="support-btn" onclick="getHelp()">
+                        <i class="fas fa-question-circle"></i>
+                        Get Help
+                    </button>
+                    <button class="support-btn" onclick="requestHardware()">
+                        <i class="fas fa-laptop"></i>
+                        Hardware Request
+                    </button>
+                </div>
+                
+                <!-- System status indicator -->
+                <div class="support-status">
+                    <p><i class="fas fa-circle text-green"></i> All systems operational</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             COMPANY NEWS WIDGET
+             Latest company announcements and news
+             ======================================== -->
+        <section class="widget news-widget">
+            <div class="widget-header">
+                <h3><i class="fas fa-newspaper"></i> Company News</h3>
+                <button class="view-all-btn" onclick="viewAllNews()">View All</button>
+            </div>
+            <div class="widget-content">
+                
+                <!-- Q2 results news article -->
+                <article class="news-item">
+                    <div class="news-meta">
+                        <span class="news-category">Company</span>
+                        <span class="news-date">July 18, 2025</span>
+                    </div>
+                    <h4>Q2 Results: Record Breaking Performance</h4>
+                    <p>We're proud to announce exceptional Q2 results with 25% growth year-over-year, exceeding all expectations...</p>
+                </article>
+                
+                <!-- Wellness program news article -->
+                <article class="news-item">
+                    <div class="news-meta">
+                        <span class="news-category">Benefits</span>
+                        <span class="news-date">July 15, 2025</span>
+                    </div>
+                    <h4>New Wellness Program Launching August 1st</h4>
+                    <p>Enhanced health benefits and mental wellness support coming soon with expanded coverage and resources...</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- ========================================
+             SOCIAL MEDIA ENGAGEMENT WIDGET
+             Employee advocacy and social sharing
+             ======================================== -->
+        <section class="widget social-widget">
+            <div class="widget-header">
+                <h3><i class="fas fa-share-alt"></i> Social Media Engagement</h3>
+            </div>
+            <div class="widget-content">
+                
+                <!-- Social media post to share -->
+                <div class="social-post">
+                    <p>"Check out our latest product launch! Help us spread the word about our innovative new features 🚀"</p>
+                    <div class="social-actions">
+                        <button class="social-btn linkedin" onclick="shareOnPlatform('linkedin')">
+                            <i class="fab fa-linkedin"></i>
+                            Share on LinkedIn
+                        </button>
+                        <button class="social-btn twitter" onclick="shareOnPlatform('twitter')">
+                            <i class="fab fa-twitter"></i>
+                            Tweet
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Social engagement statistics -->
+                <div class="engagement-stats">
+                    <div class="stat">
+                        <span class="stat-number" id="team-shares">47</span>
+                        <span class="stat-label">Team Shares</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="total-reach">234</span>
+                        <span class="stat-label">Total Reach</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             TEAM SPOTLIGHT WIDGET
+             Recognize outstanding team members
+             ======================================== -->
+        <section class="widget spotlight-widget">
+            <div class="widget-header">
+                <h3><i class="fas fa-star"></i> Team Spotlight</h3>
+            </div>
+            <div class="widget-content">
+                <div class="spotlight-member">
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=80&h=80&fit=crop&crop=face" alt="Alex">
+                    <div class="spotlight-info">
+                        <h4>Alex Thompson</h4>
+                        <p class="title">Senior Developer</p>
+                        <p class="achievement">Led the successful migration to our new cloud infrastructure, reducing system downtime by 40% and improving overall performance.</p>
+                        <div class="spotlight-badge">
+                            <i class="fas fa-trophy"></i>
+                            Employee of the Month
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             NEW SOFTWARE FEATURES WIDGET
+             Showcase latest product features and updates
+             ======================================== -->
+        <section class="widget features-widget">
+            <div class="widget-header">
+                <h3><i class="fas fa-rocket"></i> New Features</h3>
+            </div>
+            <div class="widget-content">
+                
+                <!-- Enhanced team chat feature -->
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <div class="feature-details">
+                        <h4>Enhanced Team Chat</h4>
+                        <p>Real-time messaging with file sharing, video calls, and integration with project management tools</p>
+                        <span class="feature-status new">New</span>
+                    </div>
+                </div>
+                
+                <!-- Analytics dashboard feature -->
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="feature-details">
+                        <h4>Advanced Analytics Dashboard</h4>
+                        <p>Get comprehensive insights into your productivity, project progress, and team performance metrics</p>
+                        <span class="feature-status coming-soon">Coming Soon</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             USEFUL RESOURCES WIDGET
+             Quick access to important company resources
+             ======================================== -->
+        <section class="widget resources-widget">
+            <div class="widget-header">
+                <h3><i class="fas fa-book"></i> Useful Resources</h3>
+            </div>
+            <div class="widget-content">
+                <div class="resource-links">
+                    
+                    <!-- Employee handbook resource -->
+                    <a href="#" class="resource-link" onclick="openResource('Employee Handbook')">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>Employee Handbook</span>
+                        <i class="fas fa-external-link-alt"></i>
+                    </a>
+                    
+                    <!-- Training portal resource -->
+                    <a href="#" class="resource-link" onclick="openResource('Training Portal')">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Training Portal</span>
+                        <i class="fas fa-external-link-alt"></i>
+                    </a>
+                    
+                    <!-- IT security guidelines resource -->
+                    <a href="#" class="resource-link" onclick="openResource('IT Security Guidelines')">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>IT Security Guidelines</span>
+                        <i class="fas fa-external-link-alt"></i>
+                    </a>
+                    
+                    <!-- Wellness resources -->
+                    <a href="#" class="resource-link" onclick="openResource('Wellness Resources')">
+                        <i class="fas fa-heart"></i>
+                        <span>Wellness Resources</span>
+                        <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             AVAILABLE MEETING ROOMS WIDGET
+             Real-time meeting room availability and booking
+             ======================================== -->
+        <section class="widget meeting-rooms-widget">
+            <div class="widget-header">
+                <h3><i class="fas fa-door-open"></i> Available Meeting Rooms</h3>
+                <button class="refresh-btn" onclick="refreshRoomStatus()">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
+            <div class="widget-content">
+                
+                <!-- Conference Room A - Available -->
+                <div class="room-item available">
+                    <div class="room-info">
+                        <h4>Conference Room A</h4>
+                        <p><i class="fas fa-users"></i> Capacity: 12 people</p>
+                        <p><i class="fas fa-tv"></i> Projector, Whiteboard, Video Conf</p>
+                    </div>
+                    <div class="room-status">
+                        <span class="status-badge available">Available Now</span>
+                        <button class="book-room-btn" onclick="bookRoom('Conference Room A')">
+                            <i class="fas fa-calendar-plus"></i> Book
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Innovation Lab - Currently Busy -->
+                <div class="room-item busy">
+                    <div class="room-info">
+                        <h4>Innovation Lab</h4>
+                        <p><i class="fas fa-users"></i> Capacity: 8 people</p>
+                        <p><i class="fas fa-lightbulb"></i> Brainstorm Space, Smart Board</p>
+                    </div>
+                    <div class="room-status">
+                        <span class="status-badge busy">Busy until 3:00 PM</span>
+                        <button class="book-room-btn disabled" disabled>
+                            <i class="fas fa-clock"></i> Wait
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Phone Booth - Available for private calls -->
+                <div class="room-item available">
+                    <div class="room-info">
+                        <h4>Phone Booth 1</h4>
+                        <p><i class="fas fa-user"></i> Capacity: 1 person</p>
+                        <p><i class="fas fa-phone"></i> Private calls, Quiet zone</p>
+                    </div>
+                    <div class="room-status">
+                        <span class="status-badge available">Available Now</span>
+                        <button class="book-room-btn" onclick="bookRoom('Phone Booth 1')">
+                            <i class="fas fa-calendar-plus"></i> Book
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Quick booking time slots -->
+                <div class="time-slots">
+                    <h5>Quick Book - Next Available Slots:</h5>
+                    <div class="slot-buttons">
+                        <button class="time-slot-btn" onclick="quickBook('2:00 PM - 3:00 PM')">2:00-3:00 PM</button>
+                        <button class="time-slot-btn" onclick="quickBook('3:30 PM - 4:30 PM')">3:30-4:30 PM</button>
+                        <button class="time-slot-btn" onclick="quickBook('5:00 PM - 6:00 PM')">5:00-6:00 PM</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             UPCOMING PANEL INTERVIEWS WIDGET
+             Manage interview schedules and candidates
+             ======================================== -->
+        <section class="widget interview-widget">
+            <div class="widget-header">
+                <h3><i class="fas fa-user-tie"></i> Upcoming Panel Interviews</h3>
+                <button class="view-all-btn" onclick="viewInterviewSchedule()">View Schedule</button>
+            </div>
+            <div class="widget-content">
+                
+                <!-- Sarah Martinez interview -->
+                <div class="interview-item">
+                    <div class="interview-header">
+                        <div class="candidate-info">
+                            <h4>Sarah Martinez</h4>
+                            <p>Senior Frontend Developer Position</p>
+                        </div>
+                        <div class="interview-time">
+                            <span class="interview-date">July 22, 2:00 PM</span>
+                            <span class="interview-duration">45 min</span>
+                        </div>
+                    </div>
+                    <div class="panel-details">
+                        <div class="panel-members">
+                            <h5>Panel Members:</h5>
+                            <div class="member-avatars">
+                                <div class="avatar-item">
+                                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=30&h=30&fit=crop&crop=face" alt="John">
+                                    <span>John (Tech Lead)</span>
+                                </div>
+                                <div class="avatar-item">
+                                    <img src="https://images.unsplash.com/photo-1494790108755-2616b612b9c5?w=30&h=30&fit=crop&crop=face" alt="Emily">
+                                    <span>Emily (HR)</span>
+                                </div>
+                                <div class="avatar-item">
+                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=30&h=30&fit=crop&crop=face" alt="Mike">
+                                    <span>Mike (PM)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="interview-actions">
+                            <button class="action-btn secondary" onclick="viewResume('Sarah Martinez')">
+                                <i class="fas fa-file-pdf"></i> View Resume
+                            </button>
+                            <button class="action-btn primary" onclick="joinInterview('Sarah Martinez')">
+                                <i class="fas fa-video"></i> Join Interview
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- David Chen interview -->
+                <div class="interview-item">
+                    <div class="interview-header">
+                        <div class="candidate-info">
+                            <h4>David Chen</h4>
+                            <p>DevOps Engineer Position</p>
+                        </div>
+                        <div class="interview-time">
+                            <span class="interview-date">July 23, 10:00 AM</span>
+                            <span class="interview-duration">60 min</span>
+                        </div>
+                    </div>
+                    <div class="panel-details">
+                        <div class="panel-members">
+                            <h5>Panel Members:</h5>
+                            <div class="member-avatars">
+                                <div class="avatar-item">
+                                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=30&h=30&fit=crop&crop=face" alt="Alex">
+                                    <span>Alex (DevOps)</span>
+                                </div>
+                                <div class="avatar-item">
+                                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=30&h=30&fit=crop&crop=face" alt="Lisa">
+                                    <span>Lisa (Security)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="interview-actions">
+                            <button class="action-btn secondary" onclick="viewResume('David Chen')">
+                                <i class="fas fa-file-pdf"></i> View Resume
+                            </button>
+                            <button class="action-btn primary disabled" disabled>
+                                <i class="fas fa-clock"></i> Scheduled
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================
+             EMPLOYEE REFERRALS WIDGET
+             Manage employee referral program and bonuses
+             ======================================== -->
+        <section class="widget referral-widget">
+            <div class="widget-header">
+                <h3><i class="fas fa-user-friends"></i> Employee Referrals</h3>
+                <button class="add-referral-btn" onclick="addNewReferral()">
+                    <i class="fas fa-plus"></i> Refer Someone
+                </button>
+            </div>
+            <div class="widget-content">
+                
+                <!-- Referral program statistics -->
+                <div class="referral-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="active-referrals">3</span>
+                            <span class="stat-label">Active Referrals</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-number">$2,500</span>
+                            <span class="stat-label">Potential Bonus</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Current referrals list -->
+                <div class="referral-list">
+                    
+                    <!-- Jessica Wong referral - in progress -->
+                    <div class="referral-item">
+                        <div class="referral-info">
+                            <h4>Jessica Wong</h4>
+                            <p>UX Designer Position</p>
+                            <span class="referral-status in-progress">In Progress</span>
+                        </div>
+                        <div class="referral-stage">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 60%;"></div>
+                            </div>
+                            <span class="stage-text">Technical Interview</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Robert Kim referral - pending review -->
+                    <div class="referral-item">
+                        <div class="referral-info">
+                            <h4>Robert Kim</h4>
+                            <p>Backend Developer Position</p>
+                            <span class="referral-status pending">Pending Review</span>
+                        </div>
+                        <div class="referral-stage">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 20%;"></div>
+                            </div>
+                            <span class="stage-text">Resume Review</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Anna Lopez referral - successfully hired -->
+                    <div class="referral-item">
+                        <div class="referral-info">
+                            <h4>Anna Lopez</h4>
+                            <p>Product Manager Position</p>
+                            <span class="referral-status hired">Hired! 🎉</span>
+                        </div>
+                        <div class="referral-stage">
+                            <div class="progress-bar">
+                                <div class="progress-fill success" style="width: 100%;"></div>
+                            </div>
+                            <span class="stage-text">Bonus: $1,000</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Current referral bonus programs -->
+                <div class="referral-programs">
+                    <h5>Current Referral Bonuses:</h5>
+                    <div class="bonus-list">
+                        <div class="bonus-item">
+                            <span class="position">Engineering Roles</span>
+                            <span class="bonus-amount">$1,500</span>
+                        </div>
+                        <div class="bonus-item">
+                            <span class="position">Sales Roles</span>
+                            <span class="bonus-amount">$1,000</span>
+                        </div>
+                        <div class="bonus-item">
+                            <span class="position">Senior Leadership</span>
+                            <span class="bonus-amount">$2,500</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Include external JavaScript file for all functionality -->
+    <script src="script.js"></script>
+</body>
+</html>
